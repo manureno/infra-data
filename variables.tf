@@ -21,7 +21,7 @@ variable "datacenter" {
 }
 
 variable "machine_type" {
-    default = "b2c.4x16"
+    default = "bx2.2x8"
     description = "The flavor of worker node in your cluster. Run `ibmcloud ks flavors --zone <datacenter>` to see the different flavors."
 }
 
