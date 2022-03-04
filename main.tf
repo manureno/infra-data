@@ -17,8 +17,7 @@ resource "ibm_is_vpc" "vpc-infra-data" {
 }
 
 
-/*
-resource "ibm_container_cluster" "k8s-cluster" {
+resource "ibm_container_cluster" "k8s-cluster-infra-data" {
   name              = var.cluster_name
   datacenter        = var.datacenter
   hardware          = var.hardware
@@ -28,7 +27,6 @@ resource "ibm_container_cluster" "k8s-cluster" {
   private_vlan_id   = var.private_vlan_id
   kube_version      = var.kube_version
 }
-*/
 
 
 # data "ibm_org" "org" {
