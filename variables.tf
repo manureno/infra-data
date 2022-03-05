@@ -11,17 +11,17 @@ variable "ibmcloud_api_key" {
 # }
 
 variable "region" {
-     default = "eu-central"
-     description = "Region to provision resources (eu-central = France!)."
+     default = "eu-de"
+     description = "Region to provision resources."
 }
 
 variable "datacenter" {
-    default = "par01"
-    description = "The datacenter to provision your resources in IBM Cloud (default is Paris)."
+    default = "fra02"
+    description = "The datacenter to provision your resources in IBM Cloud."
 }
 
 variable "machine_type" {
-    default = "bx2.2x8"
+    default = "free"
     description = "The flavor of worker node in your cluster. Run `ibmcloud ks flavors --zone <datacenter>` to see the different flavors."
 }
 
@@ -40,7 +40,7 @@ variable "cluster_name" {
 
 variable "poolsize" {
     type = number
-    default = 2
+    default = 1
     description = "Number of nodes in your cluster."
 }
 
@@ -50,7 +50,7 @@ variable "poolsize" {
 #  }
 
  variable "kube_version" {
-    default = "1.14.7"
+    default = "1.22.7"
     description = "Version of Kubernetes or OpenShift. Run `ic ks versions` to see all the versions."
  }
  variable "hardware" {
