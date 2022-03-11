@@ -12,9 +12,9 @@ provider "ibm" {
 }
 
 
-resource "ibm_is_vpc" "vpc-infra-data" {
-  name = "vpc-infra-data"
-}
+#resource "ibm_is_vpc" "vpc-infra-data" {
+#  name = "vpc-infra-data"
+#}
 
 
 resource "ibm_container_cluster" "k8s-cluster-infra-data" {
