@@ -1,3 +1,21 @@
+variable "org" {
+	description = "Name of the organization to which belong this infrastructure"
+	type = string
+	default = "org"
+}
+
+variable "app" {
+	description = "Name of the application using that uses this infrastructure"
+	type = string
+	default = "app"
+}
+
+variable "env" {
+	description = "Name of the environment for which is used this infrastrutreu (ex: dev/int/uat/etc.)"
+	type = string
+	default = "dev"
+}
+
 variable "ibmcloud_api_key" {
     description = "Your IBM Cloud IAM key to provision resources. Create an IBM Cloud IAM key here: cloud.ibm.com/iam/apikeys"
 }
@@ -31,11 +49,6 @@ variable "private_vlan_id" {
 
 variable "public_vlan_id" { 
     description = "Your private VLAN ID. If you don't have one, set this value to 'null' and one will be created for you. Run `ic ks vlans --zone <datacenter>` to see your VLANs."
-}
-
-variable "cluster_name" {
-    default = "k8s-cluster"
-    description = "Name of your Kubernetes or OpenShift cluster."
 }
 
 variable "poolsize" {

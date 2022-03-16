@@ -13,13 +13,13 @@ provider "ibm" {
 }
 
 
-resource "ibm_is_vpc" "vpc-infra-data" {
-  name = "vpc-infra-data"
+resource "ibm_is_vpc" "vpc-infra-ibm" {
+  name = "vpc-${var.org}-${var.env}"
 }
 
 
-resource "ibm_container_cluster" "k8s-cluster-infra-data" {
-  name              = var.cluster_name
+resource "ibm_container_cluster" "k8s-cluster-infra-ibm" {
+  name              = "k8s-cluster-${var.org}-${var.app}-${var.env}"
   datacenter        = var.datacenter
   hardware          = var.hardware
   default_pool_size = var.poolsize
@@ -31,11 +31,11 @@ resource "ibm_container_cluster" "k8s-cluster-infra-data" {
 
 
 # data "ibm_org" "org" {
-#   org = "${var.org}"
+#   org = "${var.ibm_org}"
 # }
 
 # data "ibm_space" "space" {
-#   org   = "${var.org}"
+#   org   = "${var.ibm_org}"
 #   space = "${var.space}"
 # }
 
