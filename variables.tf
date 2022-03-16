@@ -40,7 +40,7 @@ variable "vpc_zone" {
 
 variable "datacenter" {
     default = "fra02"
-    description = "The datacenter (seem a synonym of "classic zone") to provision your resources in IBM Cloud."
+    description = "The datacenter (seem a synonym of classic zone) to provision your resources in IBM Cloud."
 }
 
 variable "machine_type" {
