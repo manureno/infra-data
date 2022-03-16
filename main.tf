@@ -91,6 +91,28 @@ resource "ibm_container_vpc_worker_pool" "cluster_pool" {
 
 
 #
+# COS Instance cos-instance-org-app-env
+#
+resource "ibm_resource_instance" "cos_instance" {
+	name 				= "cos-instance-${var.org}-${var.app}-${var.env}"
+	resource_group_id 	= ibm_resource_group.resource_group.id
+	service           	= "cloud-object-storage"
+	plan              	= "standard"
+	location          	= "global"
+}
+
+
+#
+# COS Bucket cos-bucket-org-app-env
+#
+resource "ibm_cos_bucket" "cos_bucket" {
+	bucket_name 			= "cos-bucket-${var.org}-${var.app}-${var.env}"
+	resource_instance_id 	= ibm_resource_instance.cos_instance.id
+	region_location 		= var.region
+	storage_class 			= "standard"
+}
+
+#
 # K8s Cluster on classic infrastructure 
 #
 #resource "ibm_container_cluster" "k8s-cluster-infra-ibm" {
