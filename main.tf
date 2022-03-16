@@ -53,7 +53,7 @@ resource "ibm_container_vpc_worker_pool" "cluster_pool" {
   cluster           = ibm_container_vpc_cluster.cluster.id
   worker_pool_name  = "wp-${var.org}-${var.app}-${var.env}"
   flavor            = var.machine_type
-  vpc_id            = ibm_is_vpc.vpc1.id
+  vpc_id            = ibm_is_vpc.vpc-infra-ibm.id
   worker_count      = 3
   resource_group_id = data.ibm_resource_group.resource_group.id
   zones {
