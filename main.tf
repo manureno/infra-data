@@ -13,10 +13,33 @@ provider "ibm" {
   # generation = 2
 }
 
-resource "ibm_is_vpc" "vpc-infra-ibm" {
-  name = "vpc-${var.org}-${var.env}"
+#
+# Resource Group for an environment : rg-org-env
+#
+resource "ibm_resource_group" "resource_group" {
+  name = "rg-${var.org}-${var.env}"
 }
 
+#
+# Container Registry Namespace for an application : ns-org-app
+#
+resource "ibm_cr_namespace" "namespace" {
+  name              = "ns-${var.org}-${var.app}"
+  resource_group_id = ibm_resource_group.resource_group.id
+}
+
+#
+# VPC for an environment : vpc-org-env
+#
+resource "ibm_is_vpc" "vpc-infra-ibm" {
+  name = "vpc-${var.org}-${var.env}"
+  resource_group = ibm_resource_group.resource_group.id
+}
+
+
+#
+# Subnets for an environment : subnet-org-env
+#
 resource "ibm_is_subnet" "subnet" {
   name                     = "subnet-${var.org}-${var.env}"
   vpc                      = ibm_is_vpc.vpc-infra-ibm.id
@@ -32,10 +55,9 @@ resource "ibm_is_subnet" "subnet" {
 #}
 
 
-resource "ibm_resource_group" "resource_group" {
-  name = "rg-${var.org}-${var.env}"
-}
-
+#
+# VPC Cluster for an application in an environment : "k8s-vpc-cluster-org-app-env
+# 
 resource "ibm_container_vpc_cluster" "cluster" {
   name              = "k8s-vpc-cluster-${var.org}-${var.app}-${var.env}"
   vpc_id            = ibm_is_vpc.vpc-infra-ibm.id
@@ -49,6 +71,11 @@ resource "ibm_container_vpc_cluster" "cluster" {
   }
 }
 
+
+#
+# Worker pool wp-${var.org}-${var.app}-${var.env}
+#   a 2nd worker pool with a 2nd subnet would be needed to create a multisonz cluster 
+#
 resource "ibm_container_vpc_worker_pool" "cluster_pool" {
   cluster           = ibm_container_vpc_cluster.cluster.id
   worker_pool_name  = "wp-${var.org}-${var.app}-${var.env}"
