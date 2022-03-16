@@ -47,13 +47,6 @@ resource "ibm_is_subnet" "subnet" {
   total_ipv4_address_count = 256
 }
 
-#resource "ibm_is_subnet" "subnet2" {
-#  name                     = "mysubnet2"
-#  vpc                      = ibm_is_vpc.vpc1.id
-#  zone                     = "us-south-2"
-#  total_ipv4_address_count = 256
-#}
-
 
 #
 # VPC Cluster for an application in an environment : "k8s-vpc-cluster-org-app-env
@@ -61,8 +54,6 @@ resource "ibm_is_subnet" "subnet" {
 resource "ibm_container_vpc_cluster" "cluster" {
   name              = "k8s-vpc-cluster-${var.org}-${var.app}-${var.env}"
   vpc_id            = ibm_is_vpc.vpc-infra-ibm.id
-  flavor            = var.machine_type
-  worker_count      = var.poolsize
   resource_group_id = ibm_resource_group.resource_group.id
   kube_version      = var.kube_version
   zones {
