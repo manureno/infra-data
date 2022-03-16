@@ -32,16 +32,16 @@ resource "ibm_is_subnet" "subnet" {
 #}
 
 
-#data "ibm_resource_group" "resource_group" {
-#  name = "rg-${var.org}-${var.env}"
-#}
+resource "ibm_resource_group" "resource_group" {
+  name = "rg-${var.org}-${var.env}"
+}
 
 resource "ibm_container_vpc_cluster" "cluster" {
   name              = "k8s-vpc-cluster-${var.org}-${var.app}-${var.env}"
   vpc_id            = ibm_is_vpc.vpc-infra-ibm.id
   flavor            = var.machine_type
   worker_count      = 3
-  # resource_group_id = data.ibm_resource_group.resource_group.id
+  resource_group_id = ibm_resource_group.resource_group.id
   kube_version      = var.kube_version
   zones {
     subnet_id = ibm_is_subnet.subnet.id
@@ -55,7 +55,7 @@ resource "ibm_container_vpc_worker_pool" "cluster_pool" {
   flavor            = var.machine_type
   vpc_id            = ibm_is_vpc.vpc-infra-ibm.id
   worker_count      = 3
-  resource_group_id = data.ibm_resource_group.resource_group.id
+  resource_group_id = ibm_resource_group.resource_group.id
   zones {
     name      = var.datacenter
     subnet_id = ibm_is_subnet.subnet.id
