@@ -10,7 +10,7 @@ terraform {
 provider "ibm" {
   ibmcloud_api_key = var.ibmcloud_api_key
   region = "${var.region}"
-  generation = 2
+  # generation = 2
 }
 
 resource "ibm_is_vpc" "vpc-infra-ibm" {
@@ -32,16 +32,16 @@ resource "ibm_is_subnet" "subnet" {
 #}
 
 
-data "ibm_resource_group" "resource_group" {
-  name = "rg-${var.org}-${var.env}"
-}
+#data "ibm_resource_group" "resource_group" {
+#  name = "rg-${var.org}-${var.env}"
+#}
 
 resource "ibm_container_vpc_cluster" "cluster" {
-  name              = "k8s-cluster-${var.org}-${var.app}-${var.env}"
+  name              = "k8s-vpc-cluster-${var.org}-${var.app}-${var.env}"
   vpc_id            = ibm_is_vpc.vpc-infra-ibm.id
   flavor            = var.machine_type
   worker_count      = 3
-  resource_group_id = data.ibm_resource_group.resource_group.id
+  # resource_group_id = data.ibm_resource_group.resource_group.id
   kube_version      = var.kube_version
   zones {
     subnet_id = ibm_is_subnet.subnet.id
@@ -67,7 +67,7 @@ resource "ibm_container_vpc_worker_pool" "cluster_pool" {
 # K8s Cluster on classic infrastructure 
 #
 #resource "ibm_container_cluster" "k8s-cluster-infra-ibm" {
-#  name              = "k8s-cluster-${var.org}-${var.app}-${var.env}"
+#  name              = "k8s-classic-cluster-${var.org}-${var.app}-${var.env}"
 #  datacenter        = var.datacenter
 #  hardware          = var.hardware
 #  default_pool_size = var.poolsize
