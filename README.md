@@ -16,9 +16,8 @@ This repository  contains Terraform templates to create an IBM Cloud infrastruct
 ```
 infra-ibm.tf
    +- README.md : This file
-   +- terraform
-      +- main.tf : Resources creation instructions
-      +- variables.tf : Defaulted and mandatory variables 
+   +- main.tf : Resources creation instructions
+   +- variables.tf : Defaulted and mandatory variables 
 ```
 
 ## Mandatory Variables
