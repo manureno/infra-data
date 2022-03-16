@@ -33,9 +33,14 @@ variable "region" {
      description = "Region to provision resources."
 }
 
+variable "vpc_zone" {
+     default = "eu-de-1"
+     description = "VPC Zone to provision resources. Run ibmcloud ks locations to list availables zones"
+}
+
 variable "datacenter" {
     default = "fra02"
-    description = "The datacenter to provision your resources in IBM Cloud."
+    description = "The datacenter (seem a synonym of "classic zone") to provision your resources in IBM Cloud."
 }
 
 variable "machine_type" {

@@ -20,7 +20,7 @@ resource "ibm_is_vpc" "vpc-infra-ibm" {
 resource "ibm_is_subnet" "subnet" {
   name                     = "subnet-${var.org}-${var.env}"
   vpc                      = ibm_is_vpc.vpc-infra-ibm.id
-  zone                     = var.datacenter
+  zone                     = var.vpc_zone
   total_ipv4_address_count = 256
 }
 
@@ -45,7 +45,7 @@ resource "ibm_container_vpc_cluster" "cluster" {
   kube_version      = var.kube_version
   zones {
     subnet_id = ibm_is_subnet.subnet.id
-    name      = var.datacenter
+    name      = var.vpc_zone
   }
 }
 
@@ -57,7 +57,7 @@ resource "ibm_container_vpc_worker_pool" "cluster_pool" {
   worker_count      = 3
   resource_group_id = ibm_resource_group.resource_group.id
   zones {
-    name      = var.datacenter
+    name      = var.vpc_zone
     subnet_id = ibm_is_subnet.subnet.id
   }
 }
