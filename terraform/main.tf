@@ -62,7 +62,7 @@ resource "ibm_container_vpc_cluster" "cluster" {
   name              = "k8s-vpc-cluster-${var.org}-${var.app}-${var.env}"
   vpc_id            = ibm_is_vpc.vpc-infra-ibm.id
   flavor            = var.machine_type
-  worker_count      = 3
+  worker_count      = var.poolsize
   resource_group_id = ibm_resource_group.resource_group.id
   kube_version      = var.kube_version
   zones {
@@ -74,14 +74,14 @@ resource "ibm_container_vpc_cluster" "cluster" {
 
 #
 # Worker pool wp-${var.org}-${var.app}-${var.env}
-#   a 2nd worker pool with a 2nd subnet would be needed to create a multisonz cluster 
+#   a 2nd worker pool with a 2nd subnet would be needed to create a multizone cluster
 #
 resource "ibm_container_vpc_worker_pool" "cluster_pool" {
   cluster           = ibm_container_vpc_cluster.cluster.id
   worker_pool_name  = "wp-${var.org}-${var.app}-${var.env}"
   flavor            = var.machine_type
   vpc_id            = ibm_is_vpc.vpc-infra-ibm.id
-  worker_count      = 3
+  worker_count      = var.poolsize
   resource_group_id = ibm_resource_group.resource_group.id
   zones {
     name      = var.vpc_zone
@@ -111,45 +111,3 @@ resource "ibm_cos_bucket" "cos_bucket" {
 	region_location 		= var.region
 	storage_class 			= "standard"
 }
-
-#
-# K8s Cluster on classic infrastructure 
-#
-#resource "ibm_container_cluster" "k8s-cluster-infra-ibm" {
-#  name              = "k8s-classic-cluster-${var.org}-${var.app}-${var.env}"
-#  datacenter        = var.datacenter
-#  hardware          = var.hardware
-#  default_pool_size = var.poolsize
-#  machine_type      = var.machine_type
-#  public_vlan_id    = var.public_vlan_id
-#  private_vlan_id   = var.private_vlan_id
-#  kube_version      = var.kube_version
-#}
-
-
-# data "ibm_org" "org" {
-#   org = "${var.ibm_org}"
-# }
-
-# data "ibm_space" "space" {
-#   org   = "${var.ibm_org}"
-#   space = "${var.space}"
-# }
-
-# resource "ibm_service_instance" "mysql_db" {
-#   name       = "${var.service_name}"
-#   space_guid = "${data.ibm_space.space.id}"
-#   service    = "compose-for-mysql"
-#   plan       = "Standard"
-# }
-
-# resource "ibm_service_key" "mysql_db_key" {
-#   name                  = "db_key"
-#   service_instance_guid = "${ibm_service_instance.mysql_db.id}"
-# }
-
-# resource "ibm_container_bind_service" "bind_service" {
-#   cluster_name_id     = "${ibm_container_cluster.cluster.id}"
-#   service_instance_id = "${ibm_service_instance.mysql_db.id}"
-#   namespace_id        = "default"
-# }
