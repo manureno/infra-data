@@ -10,24 +10,72 @@ terraform {
 provider "ibm" {
   ibmcloud_api_key = var.ibmcloud_api_key
   region = "${var.region}"
+  generation = 2
 }
-
 
 resource "ibm_is_vpc" "vpc-infra-ibm" {
   name = "vpc-${var.org}-${var.env}"
 }
 
-
-resource "ibm_container_cluster" "k8s-cluster-infra-ibm" {
-  name              = "k8s-cluster-${var.org}-${var.app}-${var.env}"
-  datacenter        = var.datacenter
-  hardware          = var.hardware
-  default_pool_size = var.poolsize
-  machine_type      = var.machine_type
-  public_vlan_id    = var.public_vlan_id
-  private_vlan_id   = var.private_vlan_id
-  kube_version      = var.kube_version
+resource "ibm_is_subnet" "subnet" {
+  name                     = "subnet-${var.org}-${var.env}"
+  vpc                      = ibm_is_vpc.vpc-infra-ibm.id
+  zone                     = var.datacenter
+  total_ipv4_address_count = 256
 }
+
+#resource "ibm_is_subnet" "subnet2" {
+#  name                     = "mysubnet2"
+#  vpc                      = ibm_is_vpc.vpc1.id
+#  zone                     = "us-south-2"
+#  total_ipv4_address_count = 256
+#}
+
+
+data "ibm_resource_group" "resource_group" {
+  name = "rg-${var.org}-${var.env}"
+}
+
+resource "ibm_container_vpc_cluster" "cluster" {
+  name              = "k8s-cluster-${var.org}-${var.app}-${var.env}"
+  vpc_id            = ibm_is_vpc.vpc-infra-ibm.id
+  flavor            = var.machine_type
+  worker_count      = 3
+  resource_group_id = data.ibm_resource_group.resource_group.id
+  kube_version      = var.kube_version
+  zones {
+    subnet_id = ibm_is_subnet.subnet.id
+    name      = var.datacenter
+  }
+}
+
+resource "ibm_container_vpc_worker_pool" "cluster_pool" {
+  cluster           = ibm_container_vpc_cluster.cluster.id
+  worker_pool_name  = "wp-${var.org}-${var.app}-${var.env}"
+  flavor            = var.machine_type
+  vpc_id            = ibm_is_vpc.vpc1.id
+  worker_count      = 3
+  resource_group_id = data.ibm_resource_group.resource_group.id
+  zones {
+    name      = var.datacenter
+    subnet_id = ibm_is_subnet.subnet.id
+  }
+}
+
+
+#
+# K8s Cluster on classic infrastructure 
+#
+#resource "ibm_container_cluster" "k8s-cluster-infra-ibm" {
+#  name              = "k8s-cluster-${var.org}-${var.app}-${var.env}"
+#  datacenter        = var.datacenter
+#  hardware          = var.hardware
+#  default_pool_size = var.poolsize
+#  machine_type      = var.machine_type
+#  public_vlan_id    = var.public_vlan_id
+#  private_vlan_id   = var.private_vlan_id
+#  kube_version      = var.kube_version
+#}
 
 
 # data "ibm_org" "org" {
