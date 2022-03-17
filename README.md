@@ -10,7 +10,7 @@ This repository  contains Terraform templates to create an IBM Cloud infrastruct
 
 ## Infrastructure Overview
 
-![alt text](./resources/infra-template.jpg)
+![alt text](res/infra-template.jpg)
 
 ## Project Structure
 ```
@@ -20,9 +20,10 @@ infra-ibm.tf
    +- variables.tf : Defaulted and mandatory variables 
 ```
 
-## Mandatory Variables
+## Configuring the Templates
+Terraform variables are used to configure the Templates :
 
-- The organization/application and environment structure  
+- Structure organization/application and environment  
   + **org** : code name of an organization hosting applications   
   + **app** : code name of an application hosted in an organization  
   + **env** : code name of en environment in which to deploy the application (dev, uat, etc. )
@@ -30,6 +31,11 @@ infra-ibm.tf
 
 - Connection to IBM Cloud
   + **ibmcloud_api_key** : IBM Cloud IAM key used to provision resources  
+
+
+## Executing the Templates
+
+Terraform templates may be executed from IBM Cloud Schematics : https://cloud.ibm.com/schematics
 
 
 ## ibmcloud CLI _mini cheat sheet_
